@@ -51,8 +51,8 @@ public class Robot extends TimedRobot {
 
     m_myRobot = new DifferentialDrive(m_leftMotor, m_rightMotor);
 
-    m_leftStick = new Joystick(0);
-    m_rightStick = new Joystick(1);
+    m_leftStick = new Joystick(1);
+    m_rightStick = new Joystick(5);
   }
 
   @Override
