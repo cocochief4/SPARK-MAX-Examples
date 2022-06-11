@@ -18,12 +18,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Robot extends TimedRobot {
   private DifferentialDrive m_myRobot;
+
   private Joystick m_leftStick;
   private Joystick m_rightStick;
-  private static final int leftDeviceID = 1; 
-  private static final int rightDeviceID = 2;
-  private CANSparkMax m_leftMotorGroup;
-  private CANSparkMax m_rightMotorGroup;
+
+  private static final int leftUpDeviceID = 1; 
+  private static final int leftDownDeviceID = 2;
+  private CANSparkMax leftUpMotor;
+  private CANSparkMax leftDownMotor;
+  private MotorControllerGroup leftGroup;
+
+  private static final int rightUpDeviceID = 3;
+  private static final int rightDownDeviceID = 4;
+  private CANSparkMax rightUpMotor;
+  private CANSparkMax rightDownMotor;
+  private MotorControllerGroup rightGroup;
+
   private DigitalInput testInput = new DigitalInput(0);
 
   @Override
@@ -41,18 +51,26 @@ public class Robot extends TimedRobot {
      * The example below initializes four brushless motors with CAN IDs 1 and 2. Change
      * these parameters to match your setup
      */
-      m_leftMotorGroup = new CANSparkMax(leftDeviceID, MotorType.kBrushless);
-      m_rightMotorGroup = new CANSparkMax(rightDeviceID, MotorType.kBrushless);
+      leftUpMotor = new CANSparkMax(leftUpDeviceID, MotorType.kBrushless);
+      leftDownMotor = new CANSparkMax(leftDownDeviceID, MotorType.kBrushless);
+      
+      rightUpMotor = new CANSparkMax(rightUpDeviceID, MotorType.kBrushless);
+      rightDownMotor = new CANSparkMax(rightDownDeviceID, MotorType.kBrushless);
+
+      rightGroup = new MotorControllerGroup(rightUpMotor, rightDownMotor);
+      leftGroup = new MotorControllerGroup(leftUpMotor, leftDownMotor);
 
       /*
        * The RestoreFactoryDefaults method can be used to reset the configuration parameters
        * in the SPARK MAX to their factory default state. If no argument is passed, these
        * parameters will not persist between power cycles
        */
-      m_leftMotorGroup.restoreFactoryDefaults();
-      m_rightMotorGroup.restoreFactoryDefaults();
+      leftUpMotor.restoreFactoryDefaults();
+      leftDownMotor.restoreFactoryDefaults();
+      rightUpMotor.restoreFactoryDefaults();
+      rightDownMotor.restoreFactoryDefaults();
 
-      m_myRobot = new DifferentialDrive(m_leftMotorGroup, m_rightMotorGroup);
+      m_myRobot = new DifferentialDrive(leftGroup, rightGroup);
 
       m_leftStick = new Joystick(1);
       m_rightStick = new Joystick(5);
@@ -65,6 +83,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_myRobot.tankDrive(.5, .5);
     // System.out.println(testInput.get());
-    System.out.println(m_leftMotorGroup.get());
+    // System.out.println(leftUpMotor.get());
   }
 }
