@@ -54,12 +54,6 @@ public class Robot extends TimedRobot {
     // m_leftStick = new Joystick(1);
     // m_rightStick = new Joystick(5);
   }
-
-  @Override
-  public void robotPeriodic() {
-    // m_myRobot.tankDrive(m_leftStick.getY(), m_rightStick.getY());
-    // System.out.println("hellow world");
-  }
   
   @Override
   public void teleopInit() {
