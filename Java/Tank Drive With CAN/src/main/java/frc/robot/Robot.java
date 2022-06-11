@@ -9,12 +9,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
+import java.nio.ByteBuffer;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.*;
 
 public class Robot extends TimedRobot {
   private DifferentialDrive m_myRobot;
@@ -33,6 +39,9 @@ public class Robot extends TimedRobot {
   private CANSparkMax rightUpMotor;
   private CANSparkMax rightDownMotor;
   private MotorControllerGroup rightGroup;
+
+  private final I2C arduino = new I2C(Port.kOnboard, 4);
+
 
   private DigitalInput testInput = new DigitalInput(0);
 
@@ -60,6 +69,8 @@ public class Robot extends TimedRobot {
       rightGroup = new MotorControllerGroup(rightUpMotor, rightDownMotor);
       leftGroup = new MotorControllerGroup(leftUpMotor, leftDownMotor);
 
+    
+      
       /*
        * The RestoreFactoryDefaults method can be used to reset the configuration parameters
        * in the SPARK MAX to their factory default state. If no argument is passed, these
@@ -77,11 +88,20 @@ public class Robot extends TimedRobot {
   }
   
   public void teleopInit() {
-    System.out.println("hellow world");
+    System.out.println("hello world");
   }
 
   public void teleopPeriodic() {
-    m_myRobot.tankDrive(.5, .5);
+    final String data = "";
+      byte[] byteArr = new byte[8];
+      boolean success = arduino.transaction(data.getBytes(), data.getBytes().length, byteArr, 8);
+      success = arduino.read(1, 8, byteArr);
+
+      for (int i = 0; i<8; i++) {
+        System.out.println(byteArr[i]);
+      }
+      System.out.println(success);
+    // m_myRobot.tankDrive(.5, .5);
     // System.out.println(testInput.get());
     // System.out.println(leftUpMotor.get());
   }
